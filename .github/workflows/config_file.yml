@@ -43,7 +43,7 @@ jobs:
               pip install schemachange
               
               echo "Step 2: Running schemachange"
-              schemachange -f $GITHUB_WORKSPACE/DATABASES -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_QA_DATABASE -c $SF_QA_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table --vars '{"ENV_PREFIX":"QA_"}'
+              schemachange -f $GITHUB_WORKSPACE/DATABASES -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table --vars '{"ENV_PREFIX":"QA_"}'
 
      
      dev2:
@@ -75,6 +75,6 @@ jobs:
               pip install schemachange
               
               echo "Step 2: Running schemachange"
-              schemachange -f $GITHUB_WORKSPACE/DATABASES -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_PROD_DATABASE -c $SF_PROD_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table --vars '{"ENV_PREFIX":""}'
+              schemachange -f $GITHUB_WORKSPACE/DATABASES -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table --vars '{"ENV_PREFIX":""}'
 
     
