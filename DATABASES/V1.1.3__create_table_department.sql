@@ -1,0 +1,5 @@
+create table {{ENV_PREFIX}}ANTHELION_DEMO.DEMO_SCHEMA.DEPARTMENT
+(
+DEPT_ID number ,
+CODE number
+);
