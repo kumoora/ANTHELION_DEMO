@@ -33,7 +33,7 @@ jobs:
               SF_USERNAME: ${{ secrets.SF_USERNAME }}
               SF_ROLE: ${{ secrets.SF_ROLE }}
               SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
-              SF_DATABASE: ${{ secrets.SF_DATABASE}}
+              SF_DATABASE: ${{ secrets.SF_QA_DATABASE}}
               SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
             
             run: |
@@ -43,7 +43,7 @@ jobs:
               pip install schemachange
               
               echo "Step 2: Running schemachange"
-              schemachange -f $GITHUB_WORKSPACE/DATABASES -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table --vars '{"ENV_PREFIX":"QA_"}'
+              schemachange -f $GITHUB_WORKSPACE/DATABASES -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_QA_DATABASE -c $SF_QA_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table --vars '{"ENV_PREFIX":"QA_"}'
 
      
      dev2:
@@ -66,7 +66,7 @@ jobs:
               SF_USERNAME: ${{ secrets.SF_USERNAME }}
               SF_ROLE: ${{ secrets.SF_ROLE }}
               SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
-              SF_DATABASE: ${{ secrets.SF_DATABASE }}
+              SF_DATABASE: ${{ secrets.SF_PROD_DATABASE }}
               SNOWFLAKE_PASSWORD: ${{ secrets.SF_PASSWORD }}
             run: |
               echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
@@ -75,6 +75,6 @@ jobs:
               pip install schemachange
               
               echo "Step 2: Running schemachange"
-              schemachange -f $GITHUB_WORKSPACE/DATABASES -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table --vars '{"ENV_PREFIX":""}'
+              schemachange -f $GITHUB_WORKSPACE/DATABASES -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_PROD_DATABASE -c $SF_PROD_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table --vars '{"ENV_PREFIX":""}'
 
     
