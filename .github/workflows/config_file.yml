@@ -28,10 +28,10 @@ jobs:
 
           - name: Decrypt RSA key
             run: 
-              echo "${{ secrets.SF_PRIVATE_KEY }}"  > /tmp/key
-              chmod 600 /tmp/key
+              echo "${{ secrets.SF_PRIVATE_KEY }}"  > private_key.p8
+              chmod 600 private_key.p8
     
-          - name: Run schemachange
+          - name: Create connections.toml
           
             env:
               SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
@@ -39,17 +39,37 @@ jobs:
               SF_ROLE: ${{ secrets.SF_ROLE }}
               SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
               SF_DATABASE: ${{ secrets.SF_QA_DATABASE}}
-              SNOWFLAKE_PRIVATE_KEY_PATH: /tmp/key
-              SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SF_PRIVATE_KEY_PASSPHRASE }}
-            
+
+            run: |
+              cat <<EOF > connections.toml
+              [snowflake]
+              account = '${{ env.SF_ACCOUNT }}'
+              user = '${{ env.SF_USERNAME }}'
+              role = '${{ env.SF_ROLE }}'
+              warehouse = '${{ env.SF_WAREHOUSE }}'
+              database = '${{ env.SF_DATABASE }}'
+              authenticator = 'snowflake_jwt'
+              private_key_file = 'private_key.p8'
+              private_key_file_pwd = '${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}'
+              EOF
+              cat connections.toml
+
+          - name: Secure connections.toml permissions
+            run: chmod 600 connections.toml
+
+
+              
+          - name: Run schemachange 
             run: |
               echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
               python --version
               echo "Step 1: Installing schemachange"
-              pip install schemachange==3.7.0
+              pip install schemachange
+
+              
               
               echo "Step 2: Running schemachange"
-              schemachange -f $GITHUB_WORKSPACE/DATABASES -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table --vars '{"ENV_PREFIX":"QA_"}'
+              schemachange -f $GITHUB_WORKSPACE/DATABASES -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table --connections-file-path connections.toml --connection-name snowflake --vars '{"ENV_PREFIX":"QA_"}'
 
      
      dev2:
