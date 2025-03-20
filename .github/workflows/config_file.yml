@@ -40,13 +40,12 @@ jobs:
               SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
               SF_DATABASE: ${{ secrets.SF_QA_DATABASE}}
               SNOWFLAKE_PRIVATE_KEY_PATH: /tmp/key
-              SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SF_PRIVATE_KEY_PASSPHRASE}}
             
             run: |
               echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
               python --version
               echo "Step 1: Installing schemachange"
-              pip install schemachange
+              pip install schemachange==3.7.0
               
               echo "Step 2: Running schemachange"
               schemachange -f $GITHUB_WORKSPACE/DATABASES -a $SF_ACCOUNT -u $SF_USERNAME -r $SF_ROLE -w $SF_WAREHOUSE -d $SF_DATABASE -c $SF_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table --vars '{"ENV_PREFIX":"QA_"}'
