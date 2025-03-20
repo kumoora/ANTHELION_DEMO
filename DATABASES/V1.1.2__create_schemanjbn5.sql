@@ -1,1 +1,1 @@
-create schema {{ENV_PREFIX}}db.pharji2
+create schema {{ENV_PREFIX}}db.pharji3
