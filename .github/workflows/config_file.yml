@@ -43,14 +43,14 @@ jobs:
             run: |
               cat <<EOF > connections.toml
               [snowflake]
-              account = '${{ env.SF_ACCOUNT }}'
-              user = '${{ env.SF_USERNAME }}'
-              role = '${{ env.SF_ROLE }}'
-              warehouse = '${{ env.SF_WAREHOUSE }}'
-              database = '${{ env.SF_DATABASE }}'
+              account = ${{ secrets.SF_ACCOUNT }}
+              user = ${{ secrets.SF_USERNAME }}
+              role = ${{ secrets.SF_ROLE }}
+              warehouse = ${{ secrets.SF_WAREHOUSE }}
+              database = ${{ secrets.SF_DATABASE }}
               authenticator = 'snowflake_jwt'
               private_key_file = 'private_key.p8'
-              private_key_file_pwd = '${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}'
+              private_key_file_pwd = ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}
               EOF
               cat connections.toml
 
