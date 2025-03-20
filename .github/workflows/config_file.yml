@@ -26,7 +26,7 @@ jobs:
             with:
               python-version: 3.8.x
 
-          - name: Decrypt RSA KEY
+          - name: Decrypt RSA key
             run: 
               echo "${{ secrets.SF_PRIVATE_KEY }}"  > /tmp/key
               chmod 600 /tmp/key
